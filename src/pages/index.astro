@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 ---
 
-<Base title="Sol Fabricator — the open-source software factory for backend services" description="Sol Fabricator is the open-source software factory for backend services. Write OCaml or TypeScript; the sol CLI scaffolds, builds, packages, deploys, observes, and rolls back against one language-neutral contract. Apache-2.0, pre-alpha.">
+<Base title="Sol Fabricator — run a production backend without a platform team" description="Run a production backend without a platform team. Sol Fabricator turns your backend code into a production system — infrastructure, deployment, observability, and operations included. Open source, Apache-2.0, pre-alpha.">
   <main>
     <section class="hero shell">
       <nav class="nav" aria-label="Main navigation">
@@ -12,9 +12,9 @@ import Base from '../layouts/Base.astro';
         </a>
         <div class="nav-links">
           <a href="#how">How it works</a>
-          <a href="#platform">Architecture</a>
-          <a href="#principles">Principles</a>
-          <a href="https://github.com/loganbnielsen/sol/blob/main/docs/guides/TUTORIAL.md">Docs</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#cloud">Own your cloud</a>
+          <a href="#proof">Proof</a>
         </div>
         <a class="nav-cta" href="https://github.com/loganbnielsen/sol">GitHub <span aria-hidden="true">↗</span></a>
       </nav>
@@ -22,21 +22,20 @@ import Base from '../layouts/Base.astro';
       <div class="hero-main">
         <div class="hero-copy">
           <p class="eyebrow">Open-source software factory</p>
-          <h1>Build.<br/>Deploy.<br/><em>Own it.</em></h1>
-          <p class="lede">Write OCaml or TypeScript. Sol scaffolds, builds, packages, deploys, observes, and rolls back backend services against one language-neutral contract.</p>
+          <h1>Run a production backend<br/><em>without a platform team.</em></h1>
+          <p class="lede">Sol turns your backend code into a production system — builds, infrastructure, deployment, observability, and operations included. Run it locally on the same stack as production, then deploy the same contract to Kubernetes in your own cloud.</p>
           <div class="actions">
             <a class="button primary" href="#install">Get started <span>→</span></a>
             <a class="button ghost" href="https://github.com/loganbnielsen/sol/blob/main/docs/guides/TUTORIAL.md">Read the tutorial</a>
           </div>
           <p class="status-strip"><span class="status-dot" aria-hidden="true"></span>Pre-alpha · v0.1.0-alpha · not production-stable<a href="https://github.com/loganbnielsen/sol/blob/main/docs/planning/ROADMAP.md">Roadmap ↗</a></p>
         </div>
-        <div class="hero-note" aria-hidden="true">Local by default.<br/>Yours in production.<span>↙</span></div>
       </div>
 
       <div class="hero-features" aria-label="What Sol gives you">
         <article><b>⌘</b><div><h2>Open source</h2><p>Apache-2.0. Your Kubernetes cluster, your cloud account, your data.</p></div></article>
-        <article><b>✦</b><div><h2>OCaml or TypeScript</h2><p>Two first-class application languages behind one operational contract.</p></div></article>
-        <article><b>⚡</b><div><h2>Local mirrors prod</h2><p>k3d locally with the same Helm charts, service DNS, and security model.</p></div></article>
+        <article><b>✦</b><div><h2>OCaml or TypeScript</h2><p>Two first-class application languages behind one contract.</p></div></article>
+        <article><b>⚡</b><div><h2>Evidence over magic</h2><p>Qualification runs published from real AWS and GCP.</p></div></article>
       </div>
 
       <div class="hero-terminal" id="install">
@@ -49,25 +48,130 @@ import Base from '../layouts/Base.astro';
 <span class="success">✓ k3d cluster: redpanda · postgres · loki · grafana</span>
 <span class="success">✓ charge_svc deployed · worker consuming events</span>
 <span class="success">✓ curl localhost:8080/health → ok</span></pre>
-          <p aria-hidden="true">Local by default.<br/>Yours in production.<span>↙</span></p>
+          <aside class="terminal-aside" aria-label="What the local cluster includes">
+            <p class="terminal-aside-title">Local cluster</p>
+            <ul>
+              <li>Redpanda — Kafka and schema registry</li>
+              <li>PostgreSQL</li>
+              <li>Loki and Grafana</li>
+              <li>Prometheus and Pushgateway</li>
+            </ul>
+            <p class="terminal-aside-note">Same charts as production.</p>
+          </aside>
         </div>
       </div>
     </section>
 
-    <section class="platform-panel shell" id="platform">
-      <div class="platform-intro">
-        <p class="section-label">The platform</p>
-        <h2>One contract.<br/>Every primitive.</h2>
-        <p class="platform-lede">Sol compiles a workspace of services, workers, and scheduled functions into typed deployment plans, then runs them on Kubernetes — locally or in your own cloud account. You write domain logic; Sol owns the lifecycle.</p>
-        <div class="cloud-choice"><span>Run on</span><b>AWS</b><i>or</i><b>Google Cloud</b><i>or</i><b>any Kubernetes</b><small>AWS and GCP provisioning are experimental; any conformant cluster works.</small></div>
-        <div class="platform-benefits">
-          <article><span>ϟ</span><div><h3>Three primitives</h3><p><code>_svc</code> HTTP services, <code>_worker</code> Kafka consumers, <code>_fn</code> scheduled jobs.</p></div></article>
-          <article><span>◇</span><div><h3>Typed events</h3><p>Domains integrate through schema-registry events, never shared code.</p></div></article>
-          <article><span>♢</span><div><h3>Dev mirrors prod</h3><p>The same Helm charts, service DNS, and security model locally on k3d.</p></div></article>
-          <article><span>⌘</span><div><h3>Observability wired in</h3><p>Structured logs, metrics, and traces from the first message — no instrumentation.</p></div></article>
+    <section class="panel shell" id="how">
+      <div class="section-head">
+        <p class="section-label">Local → production</p>
+        <h2>“It worked locally”<br/><em>should mean something.</em></h2>
+        <p>Sol runs the same stack locally that you ship to production — same Helm charts, same service DNS, same security model. The only difference is scale. One application contract moves from your machine to your cloud.</p>
+      </div>
+      <div class="spine-flow" aria-label="The path from local to production">
+        <article>
+          <span>01</span>
+          <code>sol local run</code>
+          <b>Fast inner loop</b>
+          <small>Native processes · one <code>dune build</code> · no image rebuild</small>
+        </article>
+        <i aria-hidden="true">→</i>
+        <article>
+          <span>02</span>
+          <code>sol up</code>
+          <b>Production-shaped</b>
+          <small>Real containers · real manifests · a real cluster</small>
+        </article>
+        <i aria-hidden="true">→</i>
+        <article>
+          <span>03</span>
+          <code>sol deploy prod/aws/us-east-1</code>
+          <b>Your real cloud</b>
+          <small>AWS · GCP · or any Kubernetes</small>
+        </article>
+      </div>
+      <p class="spine-contract">Same application contract · one deployment plan</p>
+    </section>
+
+    <section class="panel shell" id="architecture">
+      <div class="section-head">
+        <p class="section-label">How it works</p>
+        <h2>Infrastructure is<br/><em>a build artifact.</em></h2>
+        <p>Sol reads your workspace and compiles it. Deployment, wiring, and observability are derived from the code — not hand-authored per environment, and not able to drift between local and production.</p>
+      </div>
+      <div class="split-grid">
+        <div class="split-panel">
+          <p class="split-title">You write</p>
+          <ul>
+            <li>Routes and handlers, with auth declared per route</li>
+            <li>Typed domain events</li>
+            <li>SQL migrations</li>
+            <li>A Dockerfile per unit</li>
+            <li>Service config and secrets in <code>sol.toml</code></li>
+            <li>Domain boundaries — one team owns each domain</li>
+          </ul>
+        </div>
+        <div class="split-panel accent">
+          <p class="split-title">Sol derives</p>
+          <ul>
+            <li>Kubernetes namespaces, Deployments, Services, CronJobs</li>
+            <li>Kafka topics, schema registration, consumer groups</li>
+            <li>The migration plan and tracking table</li>
+            <li>Service identity, metric and log labels, trace ownership</li>
+            <li>Image names and release identity</li>
+            <li>Observability wiring</li>
+          </ul>
         </div>
       </div>
-      <div class="platform-stack" aria-label="Sol platform layers">
+      <p class="split-note">Workspace convention — <code>app/&lt;domain&gt;/&lt;name&gt;_&#123;svc,worker,fn&#125;/</code> with a Dockerfile</p>
+    </section>
+
+    <section class="deploy-model shell" id="model" aria-labelledby="deploy-model-title">
+      <div class="deploy-model-head">
+        <div><p class="section-label">The application model</p><h2 id="deploy-model-title">You bring the code.<br/><span>Sol runs the system.</span></h2></div>
+        <p>Three primitives cover backend work. Sol discovers them, verifies the runtime contract, builds an immutable artifact, and operates it — locally or in your own cloud.</p>
+      </div>
+      <div class="primitive-row" aria-label="Sol application primitives">
+        <article><code>_svc</code><div><h3>Service</h3><p>Long-running HTTP APIs with per-route auth.</p></div></article>
+        <article><code>_worker</code><div><h3>Worker</h3><p>Kafka consumers with retry and dead-letter routing.</p></div></article>
+        <article><code>_fn</code><div><h3>Function</h3><p>Scheduled jobs that run once and exit.</p></div></article>
+      </div>
+      <div class="split-grid">
+        <div class="split-panel">
+          <p class="split-title">Runtime contract</p>
+          <ul>
+            <li><code>PORT</code> — the port the container listens on</li>
+            <li><code>GET /healthz</code> — liveness and readiness</li>
+            <li><code>GET /metrics</code> — Prometheus exposition</li>
+            <li><code>SIGTERM</code> — drain and shut down cleanly</li>
+          </ul>
+        </div>
+        <div class="split-panel">
+          <p class="split-title">Application contract</p>
+          <ul>
+            <li>Auth declared explicitly on every route</li>
+            <li>Typed, schema-registry-backed events between domains</li>
+            <li>PostgreSQL with typed access and migrations</li>
+            <li>Events are the only cross-domain contract — no shared code</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="platform-panel shell" id="cloud">
+      <div class="platform-intro">
+        <p class="section-label">Own your cloud</p>
+        <h2>Runs on Kubernetes.<br/><em>In your account.</em></h2>
+        <p class="platform-lede">Sol targets plain Kubernetes, not a proprietary runtime. Deploy straight to your cluster or emit manifests for GitOps — your cloud account, your registry, your data.</p>
+        <div class="cloud-choice"><span>Targets</span><b>AWS</b><i>or</i><b>Google Cloud</b><i>or</i><b>any Kubernetes</b><small>AWS and GCP provisioning are experimental; any conformant cluster works.</small></div>
+        <div class="platform-benefits">
+          <article><span>⬡</span><div><h3>Cloud-agnostic</h3><p>One application model compiles to Kubernetes, wherever it runs.</p></div></article>
+          <article><span>◇</span><div><h3>Direct or GitOps</h3><p>Apply to your cluster, or emit manifests for Argo CD to reconcile.</p></div></article>
+          <article><span>♢</span><div><h3>Escape hatches</h3><p>Per-service overrides in <code>sol.toml</code>; generated Terraform and manifests are yours to take.</p></div></article>
+          <article><span>⌘</span><div><h3>No lock-in</h3><p>Open-source substrate — Kubernetes, Strimzi, Argo CD, Prometheus, Loki, Grafana, Terraform.</p></div></article>
+        </div>
+      </div>
+      <div class="platform-stack" aria-label="Ownership layers">
         <div class="stack-spine"></div>
         <article class="stack-card stack-app"><span>⌁</span><b>Your App</b></article>
         <article class="stack-card stack-sol"><span>◉</span><b>Sol Factory</b></article>
@@ -77,68 +181,59 @@ import Base from '../layouts/Base.astro';
       </div>
     </section>
 
-    <section class="deploy-model shell" aria-labelledby="deploy-model-title">
-      <div class="deploy-model-head">
-        <div><p class="section-label">One contract, end to end</p><h2 id="deploy-model-title">You bring the code.<br/><span>Sol runs the system.</span></h2></div>
-        <p>Choose the primitive that matches the work. Sol discovers it, verifies the runtime contract, builds an immutable artifact, and operates it on the destination you selected.</p>
+    <section class="panel shell" id="ops">
+      <div class="section-head">
+        <p class="section-label">Observability &amp; operations</p>
+        <h2>Wired in from the first message.<br/><em>Operated with evidence.</em></h2>
+        <p>Logs, metrics, and traces are part of the runtime contract, not a stack you assemble. The same CLI then tells you what is running, what changed, and how to put it back.</p>
       </div>
-      <div class="primitive-row" aria-label="Sol application primitives">
-        <article><code>_svc</code><div><h3>Service</h3><p>Long-running HTTP applications and APIs.</p></div></article>
-        <article><code>_worker</code><div><h3>Worker</h3><p>Background consumers and continuous processing.</p></div></article>
-        <article><code>_fn</code><div><h3>Function</h3><p>Finite jobs and event-driven execution.</p></div></article>
-      </div>
-      <div class="deploy-flow" aria-label="How Sol deploys an application">
-        <article><span>01</span><b>Your repository</b><small>Dockerfile + unit convention</small></article>
-        <i aria-hidden="true">→</i>
-        <article><span>02</span><b>Contract check</b><small>port · health · metrics · shutdown</small></article>
-        <i aria-hidden="true">→</i>
-        <article><span>03</span><b>Build &amp; release</b><small>digest-pinned, recorded, reversible</small></article>
-        <i aria-hidden="true">→</i>
-        <article><span>04</span><b>Operate</b><small>logs · traces · metrics · rollback</small></article>
-      </div>
-      <div class="contract-card">
-        <div><span>Runtime contract</span><code>PORT</code><code>GET /healthz</code><code>GET /metrics</code><code>SIGTERM drain</code></div>
-        <p><b>Sol handles the rest.</b> Infrastructure integration, observability, rollout state, and operational evidence travel with every release.</p>
+      <div class="split-grid">
+        <div class="split-panel">
+          <p class="split-title">Built in, not bolted on</p>
+          <ul>
+            <li>Structured logs shipped to Loki</li>
+            <li>Prometheus metrics exposed per primitive</li>
+            <li>W3C trace context across services and Kafka</li>
+            <li>Grafana dashboards over one workspace, not per service</li>
+          </ul>
+        </div>
+        <div class="split-panel accent">
+          <p class="split-title">Operated as one workflow</p>
+          <ul>
+            <li><code>sol status</code> — rollout state and Kubernetes diagnosis</li>
+            <li><code>sol releases</code> and <code>sol rollback</code> — inspect and reverse</li>
+            <li><code>.sol/runs/</code> — deploy logs that outlive the terminal</li>
+            <li>Canary and blue-green rollout from <code>sol.toml</code></li>
+          </ul>
+        </div>
       </div>
     </section>
 
-    <section class="playground shell" id="how">
-      <div class="playground-head">
-        <div><p class="section-label">Deployment preview</p><h2>One CLI.<br/><span>One contract.</span></h2><p>The same workflow carries every primitive from source to a healthy, observable release — on k3d or your own Kubernetes cluster.</p></div>
-        <p class="preview-caption">A representative Sol run</p>
+    <section class="panel shell" id="proof">
+      <div class="section-head">
+        <p class="section-label">Proof</p>
+        <h2>Show the work.<br/><em>Publish the evidence.</em></h2>
+        <p>Sol is pre-alpha, and we would rather show the receipts than round up. The qualification runs, the end-to-end dogfood, and the current limits are all in the repository.</p>
       </div>
-      <div class="playground-grid">
-        <div class="code-window">
-          <div class="line-numbers" aria-hidden="true">1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</div>
-          <pre><span class="prompt">$</span> sol new workspace myapp
-<span class="prompt">$</span> cd myapp
-<span class="prompt">$</span> sol up
-
-→ Discovering app/*/*_svc · _worker · _fn
-→ Building images · rendering manifests
-<span class="success">✓ Deployed · curl localhost:8080/health → ok</span></pre>
-          <button class="copy demo-copy" aria-label="Copy playground commands" data-copy={"sol new workspace myapp\ncd myapp\nsol up"}>Copy</button>
-        </div>
-        <div class="play-actions" aria-label="Deployment capabilities">
-          <article class="selected"><span>⬡</span><div><b>Deploy a service</b><small>Build, release, and verify health</small></div></article>
-          <article><span>◇</span><div><b>Connect data</b><small>PostgreSQL with typed access and migrations</small></div></article>
-          <article><span>▣</span><div><b>Configure the environment</b><small>Settings and secrets per environment</small></div></article>
-          <article><span>⌁</span><div><b>Operate with evidence</b><small>Release inspection, logs, and rollback</small></div></article>
-        </div>
-      </div>
-      <div class="playground-cta"><div><h3>Ready to build something real?</h3><p>Start on your machine, ship to your own Kubernetes.</p></div><a class="button primary" href="https://github.com/loganbnielsen/sol/releases">Download the alpha <span>→</span></a></div>
-    </section>
-
-    <section class="principles shell" id="principles">
-      <div class="principles-head">
-        <p class="section-label">03 / Design principles</p>
-        <h2>Strong defaults.<br/><em>Clear escape hatches.</em></h2>
-      </div>
-      <div class="principle-list">
-        <article><span>Ⅰ</span><div><h3>Language neutral</h3><p>If it speaks HTTP, exposes health and metrics, and shuts down cleanly, Sol can run it.</p></div></article>
-        <article><span>Ⅱ</span><div><h3>CLI first</h3><p>The full operational path is scriptable, composable, and legible without a proprietary control panel.</p></div></article>
-        <article><span>Ⅲ</span><div><h3>Evidence over magic</h3><p>Builds, releases, and destinations stay inspectable. When something fails, the evidence survives.</p></div></article>
-        <article><span>Ⅳ</span><div><h3>Local is a real mode</h3><p>The local path is explicit and safe, with the same application contract and no chance of resolving to production.</p></div></article>
+      <div class="proof-grid">
+        <article class="proof-card">
+          <span class="proof-tag">Qualification</span>
+          <h3>Run against real cloud</h3>
+          <p>Dated, reproducible qualification runs against real AWS and GCP — the same single-region path we intend to support.</p>
+          <a href="https://github.com/loganbnielsen/sol/tree/main/docs/qualification">Read the run records ↗</a>
+        </article>
+        <article class="proof-card">
+          <span class="proof-tag">Dogfood</span>
+          <h3>End-to-end, every release</h3>
+          <p>New workspace to local cluster to deploy, observe, and roll back — exercised as the release path, not a demo.</p>
+          <a href="https://github.com/loganbnielsen/sol/blob/main/docs/guides/TUTORIAL.md">Follow the tutorial ↗</a>
+        </article>
+        <article class="proof-card">
+          <span class="proof-tag">Status</span>
+          <h3>Honest about the edges</h3>
+          <p>Single-region Kubernetes today. Multi-region, hosted, and cloud provisioning are experimental or not yet built.</p>
+          <a href="https://github.com/loganbnielsen/sol/blob/main/docs/planning/ROADMAP.md">See the roadmap ↗</a>
+        </article>
       </div>
     </section>
 
