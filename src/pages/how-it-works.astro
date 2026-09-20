@@ -1,0 +1,111 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="How Sol works — from repository to production" description="A technical walkthrough of how Sol discovers application units, derives a deployment plan, generates Kubernetes resources, and keeps the system operable in your cloud.">
+  <main class="walkthrough-page">
+    <nav class="walkthrough-nav shell" aria-label="Technical walkthrough navigation">
+      <a class="brand" href="/" aria-label="Sol home">
+        <svg viewBox="0 0 42 42" aria-hidden="true"><circle cx="21" cy="17" r="8"/><path d="M8 29c4-5 8-7 13-7s9 2 13 7"/><path d="M12 34h18"/></svg>
+        <span>sol</span>
+      </a>
+      <div class="walkthrough-progress" aria-label="Walkthrough sections">
+        <a href="#repository">01</a><a href="#plan">02</a><a href="#resources">03</a><a href="#configure">04</a><a href="#environments">05</a><a href="#operate">06</a>
+      </div>
+      <a class="walkthrough-back" href="/">Back to overview</a>
+    </nav>
+
+    <header class="walkthrough-hero shell">
+      <p class="section-label">Technical walkthrough</p>
+      <h1>Your code becomes<br/><em>a production system.</em></h1>
+      <p>Follow one backend from repository conventions to generated Kubernetes resources, then from a fast local loop to an observable release in your cloud.</p>
+      <div class="walkthrough-contract"><span>Same code.</span><span>Same contract.</span><span>Different environments.</span></div>
+      <a class="walkthrough-start" href="#repository">Start with the repository <span aria-hidden="true">↓</span></a>
+    </header>
+
+    <section class="walkthrough-step shell" id="repository">
+      <div class="step-copy">
+        <span class="step-number">01</span>
+        <p class="section-label">Your repository</p>
+        <h2>Structure declares intent.</h2>
+        <p>Sol discovers application units from a small, explicit convention. The suffix says how a unit runs; the domain path says who owns it.</p>
+        <ul class="step-points"><li><code>_svc</code> is a long-running HTTP service</li><li><code>_worker</code> consumes background work and events</li><li><code>_fn</code> runs once or on a schedule</li></ul>
+      </div>
+      <div class="repo-diagram" aria-label="Repository tree mapped to application units">
+        <div class="repo-tree code-surface">
+          <p><b>pluto/</b></p><p>├─ app/</p><p>│&nbsp; ├─ checkout/</p>
+          <p class="tree-svc">│&nbsp; │&nbsp; └─ checkout_svc/</p>
+          <p class="tree-worker">│&nbsp; │&nbsp; └─ payment_worker/</p>
+          <p class="tree-fn">│&nbsp; │&nbsp; └─ reconcile_fn/</p>
+          <p>│&nbsp; └─ accounts/</p><p class="tree-svc">│&nbsp;&nbsp;&nbsp;&nbsp; └─ accounts_svc/</p>
+          <p>├─ sol.toml</p><p>└─ deploy/</p><p>&nbsp;&nbsp; ├─ aws-eks.yml</p><p>&nbsp;&nbsp; └─ gcp-gke.yml</p>
+        </div>
+        <div class="unit-map">
+          <article class="unit svc"><code>_svc</code><div><b>checkout</b><small>HTTP API</small></div></article>
+          <article class="unit worker"><code>_worker</code><div><b>payment</b><small>Event consumer</small></div></article>
+          <article class="unit fn"><code>_fn</code><div><b>reconcile</b><small>Scheduled job</small></div></article>
+          <article class="unit svc"><code>_svc</code><div><b>accounts</b><small>HTTP API</small></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="walkthrough-step shell" id="plan">
+      <div class="step-copy"><span class="step-number">02</span><p class="section-label">Sol builds a plan</p><h2>Conventions compile into a complete system.</h2><p>Sol combines repository structure, <code>sol.toml</code>, the selected destination, and safe defaults into one inspectable deployment model.</p></div>
+      <div class="plan-grid">
+        <div class="analysis-card"><p class="diagram-label">Repository analysis</p><ol><li>Discover domains and units</li><li>Classify service, worker, or function</li><li>Read configuration and destination</li><li>Apply conventions and defaults</li></ol></div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="code-surface plan-code"><span>application: pluto</span><span>destination: prod/aws/us-east-1</span><span>units:</span><span>&nbsp; checkout_svc → service</span><span>&nbsp; payment_worker → worker</span><span>&nbsp; reconcile_fn → scheduled job</span><span>release: digest pinned</span></div>
+      </div>
+      <p class="diagram-footnote">The plan is conceptual here; the CLI exposes the resulting resources and release evidence through the supported deployment and inspection commands.</p>
+    </section>
+
+    <section class="walkthrough-step shell" id="resources">
+      <div class="step-copy"><span class="step-number">03</span><p class="section-label">Generated resources</p><h2>Each primitive becomes ordinary Kubernetes.</h2><p>Sol targets an open substrate in your account. The generated resources remain recognizable, inspectable, and operable with the tools you already use.</p></div>
+      <div class="resource-map" aria-label="Application primitives mapped to Kubernetes resources">
+        <article class="resource-row"><div class="resource-unit svc"><code>checkout_svc</code><span>service</span></div><i aria-hidden="true">→</i><div class="resource-cards"><span>Deployment</span><span>Service</span><span>ConfigMap / Secret</span><span>Ingress <small>optional</small></span></div></article>
+        <article class="resource-row"><div class="resource-unit worker"><code>payment_worker</code><span>worker</span></div><i aria-hidden="true">→</i><div class="resource-cards"><span>Deployment</span><span>ConfigMap / Secret</span><span>Consumer identity</span></div></article>
+        <article class="resource-row"><div class="resource-unit fn"><code>reconcile_fn</code><span>function</span></div><i aria-hidden="true">→</i><div class="resource-cards"><span>Job / CronJob</span><span>ConfigMap / Secret</span><span>Run evidence</span></div></article>
+      </div>
+    </section>
+
+    <section class="walkthrough-step shell" id="configure">
+      <div class="step-copy"><span class="step-number">04</span><p class="section-label">Configure and customize</p><h2>Strong defaults. Explicit escape hatches.</h2><p>Sol derives what it can and makes the remaining decisions visible. You configure application intent—not a second copy of the underlying platform.</p></div>
+      <div class="config-grid">
+        <pre class="code-surface"><span class="soft"># Application configuration</span>
+[app]
+name = "pluto"
+
+[defaults]
+replicas = 2
+
+[units.checkout_svc]
+replicas = 3
+env = &#123; LOG_LEVEL = "info" &#125;</pre>
+        <div class="config-boundary"><article><b>Sol infers</b><p>Unit type · resource shape · service discovery · probes · observability labels · build identity</p></article><article><b>You choose</b><p>Destination · scaling · resource limits · external access · environment values · advanced overrides</p></article></div>
+      </div>
+    </section>
+
+    <section class="walkthrough-step shell" id="environments">
+      <div class="step-copy"><span class="step-number">05</span><p class="section-label">Local to production</p><h2>Increase realism without changing the contract.</h2><p>Move from native-process feedback to production-shaped containers, then to Kubernetes in your cloud. Each stage answers a different question without inventing a different application model.</p></div>
+      <div class="environment-flow" aria-label="Local to production workflow">
+        <article><span>Fast loop</span><code>sol local run</code><b>Native processes</b><small>One build · hot feedback</small></article><i aria-hidden="true">→</i>
+        <article><span>Production-shaped</span><code>sol up</code><b>Local Kubernetes</b><small>Real containers · real charts</small></article><i aria-hidden="true">→</i>
+        <article><span>Your cloud</span><code>sol deploy prod/aws/us-east-1</code><b>Managed Kubernetes</b><small>AWS · GCP · conformant clusters</small></article>
+      </div>
+      <div class="same-contract">Same application contract <span>PORT · /healthz · /metrics · SIGTERM</span></div>
+    </section>
+
+    <section class="walkthrough-step shell" id="operate">
+      <div class="step-copy"><span class="step-number">06</span><p class="section-label">Inspect, operate, iterate</p><h2>The evidence survives the terminal.</h2><p>Status, releases, logs, metrics, traces, and rollback are part of the same workflow. When something fails, Sol connects the application model back to the Kubernetes evidence.</p></div>
+      <div class="ops-grid">
+        <div class="code-surface ops-terminal"><span><b>$ sol status</b></span><span>UNIT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; KIND&nbsp;&nbsp;&nbsp; STATUS</span><span>checkout_svc&nbsp;&nbsp;&nbsp;&nbsp; service&nbsp; <em>Running</em></span><span>payment_worker&nbsp;&nbsp; worker&nbsp;&nbsp; <em>Running</em></span><span>reconcile_fn&nbsp;&nbsp;&nbsp;&nbsp; job&nbsp;&nbsp;&nbsp;&nbsp; <em>Succeeded</em></span><span class="terminal-gap"><b>$ sol logs checkout_svc</b></span><span>INFO&nbsp; server started on :8080</span><span>INFO&nbsp; GET /healthz 200 3ms</span></div>
+        <div class="ops-cards"><article><b>Observe</b><p>Prometheus metrics, Loki logs, Grafana dashboards, and trace context are wired to the unit identity.</p></article><article><b>Recover</b><p>Inspect release records, diagnose rollout state, and use <code>sol rollback</code> when a release should be reversed.</p></article><article class="control-card"><b>You keep control</b><p>The resources run in your cloud. Inspect or modify them with standard Kubernetes tools—and keep them if you stop using Sol.</p></article></div>
+      </div>
+    </section>
+
+    <section class="walkthrough-close shell">
+      <p class="section-label">One model, end to end</p><h2>Ready to see the real workflow?</h2><p>The repository tutorial walks through the current pre-alpha CLI and the exact commands it supports today.</p>
+      <div class="actions"><a class="button primary" href="https://github.com/loganbnielsen/sol/blob/main/docs/guides/TUTORIAL.md">Open the tutorial <span>↗</span></a><a class="button ghost" href="/">Back to Sol</a></div>
+    </section>
+  </main>
+</Base>
