@@ -326,3 +326,65 @@ footer .brand{color:var(--paper);font-family:"Manrope",sans-serif;font-size:1.1r
 .walkthrough-close{min-height:430px;margin-top:.8rem;border:1px solid #dce5ef;border-radius:16px;background:#fff}.walkthrough-close h2{color:#0a1a33}.walkthrough-close>p:not(.section-label){color:#647991}.walkthrough-close .button.primary{background:#1671dc;border-color:#1671dc;color:#fff}.walkthrough-close .button.ghost{border-color:#cdd9e5;color:#2c4d70}
 @media(max-width:900px){.repo-diagram{grid-template-columns:1fr}.unit-map{padding-left:0}.unit-map:before,.unit:before,.unit:after{display:none}.resource-row{grid-template-columns:1fr}.resource-row>i{transform:rotate(90deg)}.resource-cards:before,.resource-cards>span:before{display:none}}
 @media(max-width:560px){.walkthrough-hero{min-height:440px}.walkthrough-hero h1{font-size:clamp(2.8rem,13vw,4rem)}.step-copy .section-label,.step-copy h2,.step-copy>p:not(.section-label),.step-points{margin-left:0}.step-number{position:relative;top:auto;margin-bottom:1rem}.resource-cards{grid-template-columns:1fr}.walkthrough-close{border-radius:11px}}
+
+/* ---- Walkthrough polish (see docs/POSITIONING.md) ---- */
+.walkthrough-page { color-scheme:light; }
+.walkthrough-hero:after { display:none; }
+.code-surface { overflow-x:auto; }
+.repo-tree { display:flex; flex-direction:column; justify-content:center; }
+.environment-flow article { min-height:150px; }
+.ops-terminal { min-height:240px; }
+.analysis-card li { color:#54697e; }
+.unit small { color:#5d7488; }
+.step-copy>p:not(.section-label) { color:#586e85; }
+.diagram-footnote { color:#5f7488; }
+.ops-cards p { color:#5f7488; }
+.resource-row { grid-template-columns:220px 1fr; }
+.resource-row>i { display:none; }
+.resource-cards:before,.resource-cards>span:before { display:none; }
+.config-boundary article:first-child { border-color:#dbe5ef; background:#fff; }
+.config-boundary article:last-child { border-color:#b8d6f6; background:#eef6ff; }
+.primitive-legend { display:flex; gap:1.1rem; margin:0 0 1.4rem; color:#54697e; font:500 .68rem "DM Mono",monospace; letter-spacing:.06em; text-transform:uppercase; }
+.primitive-legend span { display:flex; align-items:center; gap:.45rem; }
+.primitive-legend span:before { content:""; width:9px; height:9px; border-radius:3px; background:#2f7ff0; }
+.primitive-legend .legend-worker:before { background:#35a865; }
+.primitive-legend .legend-fn:before { background:#875fda; }
+.walkthrough-page footer { border-top-color:#dce5ef; color:#6b7c8f; }
+.walkthrough-page footer .brand { color:#0b1b35; }
+.walkthrough-page footer .brand svg { stroke:#0b1b35; }
+.walkthrough-page footer .brand svg circle { fill:#2f7ff0; }
+.walkthrough-page .footer-brand p { color:#6b7c8f; }
+.walkthrough-page .footer-links a:hover { color:#1468d4; }
+@media (max-width:900px) {
+  .walkthrough-nav { grid-template-columns:1fr auto; height:auto; padding-block:.85rem; row-gap:.7rem; }
+  .walkthrough-progress { grid-column:1 / -1; display:flex; justify-content:center; flex-wrap:wrap; }
+  .repo-tree { justify-content:flex-start; }
+  .resource-row { grid-template-columns:1fr; }
+}
+@media (max-width:560px) {
+  .walkthrough-nav { height:auto; }
+  .primitive-legend { flex-wrap:wrap; gap:.6rem 1rem; }
+}
+
+/* Walkthrough polish 2: step nav state, row fill, spacing, contrast */
+.walkthrough-progress a { color:#5d738c; border-color:#c7d6e6; }
+.walkthrough-progress a.is-active { background:#2f7ff0; border-color:#2f7ff0; color:#fff; }
+.step-points li.point-svc code { color:#1768cb; }
+.step-points li.point-worker code { color:#238453; }
+.step-points li.point-fn code { color:#7550c5; }
+.resource-cards { display:flex; flex-wrap:wrap; }
+.resource-cards>span { flex:1 1 0; min-width:120px; }
+.config-grid { align-items:start; }
+.config-grid pre { min-height:0; }
+.walkthrough-hero { min-height:360px; padding-block:clamp(3rem,5vw,4rem); }
+.unit small { color:#54697e; }
+.diagram-footnote { color:#4f6578; }
+.step-points li { color:#45607c; }
+@media (max-width:560px) {
+  .walkthrough-progress a { width:34px; height:34px; }
+}
+
+/* Walkthrough polish 3: contrast on the smallest text */
+.walkthrough-progress a { color:#48607a; }
+.primitive-legend { color:#45607c; }
+.walkthrough-page .soft { color:#8ea6bd; }

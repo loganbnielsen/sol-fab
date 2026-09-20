@@ -29,58 +29,73 @@ import Base from '../layouts/Base.astro';
         <p class="section-label">Your repository</p>
         <h2>Structure declares intent.</h2>
         <p>Sol discovers application units from a small, explicit convention. The suffix says how a unit runs; the domain path says who owns it.</p>
-        <ul class="step-points"><li><code>_svc</code> is a long-running HTTP service</li><li><code>_worker</code> consumes background work and events</li><li><code>_fn</code> runs once or on a schedule</li></ul>
+        <ul class="step-points"><li class="point-svc"><code>_svc</code> is a long-running HTTP service</li><li class="point-worker"><code>_worker</code> consumes background work and events</li><li class="point-fn"><code>_fn</code> runs once or on a schedule</li></ul>
       </div>
+      <p class="primitive-legend"><span>service · HTTP</span><span class="legend-worker">worker · Kafka consumer</span><span class="legend-fn">function · scheduled</span></p>
       <div class="repo-diagram" aria-label="Repository tree mapped to application units">
         <div class="repo-tree code-surface">
-          <p><b>pluto/</b></p><p>├─ app/</p><p>│&nbsp; ├─ checkout/</p>
-          <p class="tree-svc">│&nbsp; │&nbsp; └─ checkout_svc/</p>
-          <p class="tree-worker">│&nbsp; │&nbsp; └─ payment_worker/</p>
+          <p><b>myapp/</b></p>
+          <p>├─ app/</p>
+          <p>│&nbsp; ├─ accounts/</p>
+          <p class="tree-svc">│&nbsp; │&nbsp; └─ accounts_svc/</p>
+          <p>│&nbsp; ├─ billing/</p>
           <p class="tree-fn">│&nbsp; │&nbsp; └─ reconcile_fn/</p>
-          <p>│&nbsp; └─ accounts/</p><p class="tree-svc">│&nbsp;&nbsp;&nbsp;&nbsp; └─ accounts_svc/</p>
-          <p>├─ sol.toml</p><p>└─ deploy/</p><p>&nbsp;&nbsp; ├─ aws-eks.yml</p><p>&nbsp;&nbsp; └─ gcp-gke.yml</p>
+          <p>│&nbsp; ├─ checkout/</p>
+          <p class="tree-svc">│&nbsp; │&nbsp; └─ checkout_svc/</p>
+          <p>│&nbsp; └─ payments/</p>
+          <p class="tree-worker">│&nbsp;&nbsp;&nbsp;&nbsp; └─ payment_worker/</p>
+          <p>├─ db/migrations/</p>
+          <p>├─ events/</p>
+          <p>├─ sol/</p>
+          <p>│&nbsp; └─ prod/aws/us-east-1.yml</p>
+          <p>└─ sol.yml</p>
         </div>
         <div class="unit-map">
-          <article class="unit svc"><code>_svc</code><div><b>checkout</b><small>HTTP API</small></div></article>
-          <article class="unit worker"><code>_worker</code><div><b>payment</b><small>Event consumer</small></div></article>
-          <article class="unit fn"><code>_fn</code><div><b>reconcile</b><small>Scheduled job</small></div></article>
-          <article class="unit svc"><code>_svc</code><div><b>accounts</b><small>HTTP API</small></div></article>
+          <article class="unit svc"><code>_svc</code><div><b>accounts</b><small>HTTP API · :8080</small></div></article>
+          <article class="unit fn"><code>_fn</code><div><b>reconcile</b><small>Cron schedule</small></div></article>
+          <article class="unit svc"><code>_svc</code><div><b>checkout</b><small>HTTP API · :8080</small></div></article>
+          <article class="unit worker"><code>_worker</code><div><b>payment</b><small>Kafka consumer</small></div></article>
         </div>
       </div>
+      <p class="diagram-footnote">Each unit can carry its own <code>sol.toml</code>; the workspace root holds <code>sol.yml</code> and the target overlays under <code>sol/&lt;env&gt;/&lt;provider&gt;/&lt;region&gt;.yml</code>.</p>
     </section>
 
     <section class="walkthrough-step walkthrough-support shell" id="plan">
-      <div class="step-copy"><span class="step-number">02</span><p class="section-label">Sol builds a plan</p><h2>Conventions compile into a complete system.</h2><p>Sol combines repository structure, <code>sol.toml</code>, the selected destination, and safe defaults into one inspectable deployment model.</p></div>
+      <div class="step-copy"><span class="step-number">02</span><p class="section-label">Sol builds a plan</p><h2>Conventions compile into a complete system.</h2><p>Sol combines repository structure, <code>sol.yml</code>, the selected destination, and safe defaults into one inspectable deployment model.</p></div>
       <div class="plan-grid">
         <div class="analysis-card"><p class="diagram-label">Repository analysis</p><ol><li>Discover domains and units</li><li>Classify service, worker, or function</li><li>Read configuration and destination</li><li>Apply conventions and defaults</li></ol></div>
         <div class="flow-arrow" aria-hidden="true">→</div>
-        <div class="code-surface plan-code"><span>application: pluto</span><span>destination: prod/aws/us-east-1</span><span>units:</span><span>&nbsp; checkout_svc → service</span><span>&nbsp; payment_worker → worker</span><span>&nbsp; reconcile_fn → scheduled job</span><span>release: digest pinned</span></div>
+        <div class="code-surface plan-code"><span>application: myapp</span><span>destination: prod/aws/us-east-1</span><span>units:</span><span>&nbsp; accounts_svc → service</span><span>&nbsp; reconcile_fn → scheduled job</span><span>&nbsp; checkout_svc → service</span><span>&nbsp; payment_worker → worker</span><span>release: digest pinned</span></div>
       </div>
       <p class="diagram-footnote">The plan is conceptual here; the CLI exposes the resulting resources and release evidence through the supported deployment and inspection commands.</p>
     </section>
 
     <section class="walkthrough-step reference-panel shell" id="resources">
       <div class="step-copy"><span class="step-number">03</span><p class="section-label">Generated resources</p><h2>Each primitive becomes ordinary Kubernetes.</h2><p>Sol targets an open substrate in your account. The generated resources remain recognizable, inspectable, and operable with the tools you already use.</p></div>
-      <div class="resource-map" aria-label="Application primitives mapped to Kubernetes resources">
-        <article class="resource-row"><div class="resource-unit svc"><code>checkout_svc</code><span>service</span></div><i aria-hidden="true">→</i><div class="resource-cards"><span>Deployment</span><span>Service</span><span>ConfigMap / Secret</span><span>Ingress <small>optional</small></span></div></article>
-        <article class="resource-row"><div class="resource-unit worker"><code>payment_worker</code><span>worker</span></div><i aria-hidden="true">→</i><div class="resource-cards"><span>Deployment</span><span>ConfigMap / Secret</span><span>Consumer identity</span></div></article>
-        <article class="resource-row"><div class="resource-unit fn"><code>reconcile_fn</code><span>function</span></div><i aria-hidden="true">→</i><div class="resource-cards"><span>Job / CronJob</span><span>ConfigMap / Secret</span><span>Run evidence</span></div></article>
+      <div class="resource-map" aria-label="Application primitives and the resources they generate">
+        <article class="resource-row"><div class="resource-unit svc"><code>checkout_svc</code><span>service</span></div><div class="resource-cards"><span>Deployment</span><span>Service</span><span>ConfigMap / Secret</span><span>Ingress <small>optional</small></span></div></article>
+        <article class="resource-row"><div class="resource-unit worker"><code>payment_worker</code><span>worker</span></div><div class="resource-cards"><span>Deployment</span><span>ConfigMap / Secret</span><span>Consumer identity</span></div></article>
+        <article class="resource-row"><div class="resource-unit fn"><code>reconcile_fn</code><span>function</span></div><div class="resource-cards"><span>Job / CronJob</span><span>ConfigMap / Secret</span><span>Run evidence</span></div></article>
       </div>
+      <p class="diagram-footnote">These are emitted together as one set per unit — not a pipeline. Namespaces and service accounts are generated alongside them.</p>
     </section>
 
     <section class="walkthrough-step walkthrough-support shell" id="configure">
       <div class="step-copy"><span class="step-number">04</span><p class="section-label">Configure and customize</p><h2>Strong defaults. Explicit escape hatches.</h2><p>Sol derives what it can and makes the remaining decisions visible. You configure application intent—not a second copy of the underlying platform.</p></div>
       <div class="config-grid">
-        <pre class="code-surface"><span class="soft"># Application configuration</span>
-[app]
-name = "pluto"
-
-[defaults]
-replicas = 2
-
-[units.checkout_svc]
+        <pre class="code-surface"><span class="soft"># app/checkout/checkout_svc/sol.toml — every field is optional</span>
+[infra.scale]
 replicas = 3
-env = &#123; LOG_LEVEL = "info" &#125;</pre>
+cpu      = "250m"
+memory   = "256Mi"
+
+[infra.env]
+config  = &#123; LOG_LEVEL = "info" &#125;
+secrets = ["DATABASE_URL"]
+
+[infra.rollout]
+strategy = "canary"
+steps    = [10, 40, 100]   # % of traffic</pre>
         <div class="config-boundary"><article><b>Sol infers</b><p>Unit type · resource shape · service discovery · probes · observability labels · build identity</p></article><article><b>You choose</b><p>Destination · scaling · resource limits · external access · environment values · advanced overrides</p></article></div>
       </div>
     </section>
@@ -107,5 +122,38 @@ env = &#123; LOG_LEVEL = "info" &#125;</pre>
       <p class="section-label">One model, end to end</p><h2>Ready to see the real workflow?</h2><p>The repository tutorial walks through the current pre-alpha CLI and the exact commands it supports today.</p>
       <div class="actions"><a class="button primary" href="https://github.com/loganbnielsen/sol/blob/main/docs/guides/TUTORIAL.md">Open the tutorial <span>↗</span></a><a class="button ghost" href="/">Back to Sol</a></div>
     </section>
+
+    <footer class="shell walkthrough-footer">
+      <div class="footer-brand">
+        <a class="brand" href="/"><svg viewBox="0 0 42 42" aria-hidden="true"><circle cx="21" cy="17" r="8"/><path d="M8 29c4-5 8-7 13-7s9 2 13 7"/><path d="M12 34h18"/></svg><span>sol</span></a>
+        <p>Sol Fabricator — open-source software factory for backend services. Apache-2.0.</p>
+      </div>
+      <div class="footer-right">
+        <nav class="footer-links" aria-label="Project links">
+          <a href="/">Overview</a>
+          <a href="https://github.com/loganbnielsen/sol">GitHub</a>
+          <a href="https://github.com/loganbnielsen/sol/blob/main/docs/guides/TUTORIAL.md">Tutorial</a>
+          <a href="https://github.com/loganbnielsen/sol/releases">Releases</a>
+          <a href="https://github.com/loganbnielsen/sol/blob/main/docs/planning/ROADMAP.md">Roadmap</a>
+        </nav>
+        <span>© 2026 Sol Fabricator · Apache-2.0</span>
+      </div>
+    </footer>
   </main>
+  <script>
+    const steps = Array.from(document.querySelectorAll<HTMLElement>('.walkthrough-step'));
+    const dots = Array.from(document.querySelectorAll('.walkthrough-progress a'));
+    if (steps.length && dots.length) {
+      const setActive = (id: string) => dots.forEach((dot) => dot.classList.toggle('is-active', dot.getAttribute('href') === '#' + id));
+      const update = () => {
+        const marker = window.scrollY + window.innerHeight * 0.35;
+        let current = steps[0].id;
+        for (const step of steps) if (step.offsetTop <= marker) current = step.id;
+        setActive(current);
+      };
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('hashchange', update);
+      update();
+    }
+  </script>
 </Base>

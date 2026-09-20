@@ -159,11 +159,12 @@ infrastructure) · OCaml or TypeScript · Evidence over magic.
 
 ## 7. Homepage vs. later pages
 
-Not built yet — recorded so homepage sections stay liftable.
+The homepage owns the promise; everything else is split off only when a section outgrows it.
 
 | Page | Owns |
 |---|---|
 | `/` | Promise, three pillars, the spine, primitives overview, own-cloud overview, ops overview, proof teaser, CTA |
+| `/how-it-works` | **Built.** The technical walkthrough: repository → plan → generated resources → configure → local-to-production → operate. Deliberately a light "technical board" theme to read as documentation rather than marketing. All content subject to the same evidence rule as the homepage. |
 | `/why` | Pillars in depth: typed events, one way to do things, security on day 1, escape hatches, comparisons |
 | `/docs` | Curated tutorial + concepts (`contract/runtime.md`, `substrate.md`) + deploy/observability/escape-hatch guides + CLI reference generated from the CLI |
 | `/proof` | Qualification run records, dogfood reports, current limitations |
