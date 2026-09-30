@@ -107,7 +107,7 @@ Every row must resolve to something real in `../sol`.
 | One contract, two languages | `README.md`; `@sol-fab/kafka`, `@sol-fab/obs` |
 | Typed events, no shared code | `README.md` / `PRODUCT_ARCHITECTURE.md` application model |
 | Your cloud, no proprietary runtime | FOSS substrate (Kubernetes, Strimzi, Argo CD, Prometheus, Loki, Grafana, Terraform); `sol cloud plan/apply/destroy` |
-| Qualified on real cloud | `docs/qualification/` run records |
+| Qualified on real cloud | `internal/qualification/` run records |
 | Legible to agents | `README.md` — conventions regular enough for AI coding agents |
 
 ---
