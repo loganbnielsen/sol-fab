@@ -3,3 +3,4 @@ dist/
 .astro/
 .sites-runtime/
 .openai/
+__pycache__/
