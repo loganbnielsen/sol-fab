@@ -23,7 +23,7 @@ import Base from '../layouts/Base.astro';
         <div class="hero-copy">
           <p class="eyebrow">Open-source software factory</p>
           <h1>Run a production backend<br/><em>without a platform team.</em></h1>
-          <p class="lede">Sol turns your backend code into a production system — builds, infrastructure, deployment, observability, and operations included. Run it locally on the same stack as production, then deploy the same contract to Kubernetes in your own cloud.</p>
+          <p class="lede">Sol turns your backend code into a production system — builds, infrastructure, deployment, observability, and operations included. Run it locally on the same stack as production, then deploy the same contract to Kubernetes or provider-managed serverless in your own cloud.</p>
           <div class="actions">
             <a class="button primary" href="#install">Get started <span>→</span></a>
             <a class="button ghost" href="/how-it-works/">Technical walkthrough</a>
@@ -33,7 +33,7 @@ import Base from '../layouts/Base.astro';
       </div>
 
       <div class="hero-features" aria-label="What Sol gives you">
-        <article><b>⌘</b><div><h2>Open source</h2><p>Apache-2.0. Your Kubernetes cluster, your cloud account, your data.</p></div></article>
+        <article><b>⌘</b><div><h2>Open source</h2><p>Apache-2.0. Your cloud account, your data, and infrastructure you can keep.</p></div></article>
         <article><b>✦</b><div><h2>OCaml or TypeScript</h2><p>Two first-class application languages behind one contract.</p></div></article>
         <article><b>⚡</b><div><h2>Evidence over magic</h2><p>Qualification runs published from real AWS and GCP.</p></div></article>
       </div>
@@ -87,7 +87,7 @@ import Base from '../layouts/Base.astro';
           <span>03</span>
           <code>sol deploy prod/aws/us-east-1</code>
           <b>Your real cloud</b>
-          <small>AWS · GCP · or any Kubernetes</small>
+          <small>AWS · GCP · Kubernetes or serverless</small>
         </article>
       </div>
       <p class="spine-contract">Same application contract · one deployment plan</p>
@@ -114,7 +114,7 @@ import Base from '../layouts/Base.astro';
         <div class="split-panel accent">
           <p class="split-title">Sol derives</p>
           <ul>
-            <li>Kubernetes namespaces, Deployments, Services, CronJobs</li>
+            <li>Kubernetes namespaces, Deployments, Services, CronJobs — or Lambda/Cloud Run services and jobs</li>
             <li>Kafka topics, schema registration, consumer groups</li>
             <li>The migration plan and tracking table</li>
             <li>Service identity, metric and log labels, trace ownership</li>
@@ -161,21 +161,21 @@ import Base from '../layouts/Base.astro';
     <section class="platform-panel shell" id="cloud">
       <div class="platform-intro">
         <p class="section-label">Own your cloud</p>
-        <h2>Runs on Kubernetes.<br/><em>In your account.</em></h2>
-        <p class="platform-lede">Sol targets plain Kubernetes, not a proprietary runtime. Deploy straight to your cluster or emit manifests for GitOps — your cloud account, your registry, your data.</p>
-        <div class="cloud-choice"><span>Targets</span><b>AWS</b><i>or</i><b>Google Cloud</b><i>or</i><b>any Kubernetes</b><small>AWS and GCP provisioning are experimental; any conformant cluster works.</small></div>
+        <h2>Kubernetes or serverless.<br/><em>In your account.</em></h2>
+        <p class="platform-lede">Sol targets plain Kubernetes and provider-managed serverless, not a proprietary runtime. Deploy straight to your cluster, emit manifests for GitOps, or run <code>-svc</code> and <code>-fn</code> on Lambda or Cloud Run — your cloud account, your registry, your data.</p>
+        <div class="cloud-choice"><span>Targets</span><b>AWS</b><i>or</i><b>Google Cloud</b><i>or</i><b>any Kubernetes</b><small>AWS and GCP provisioning and serverless execution are experimental; any conformant cluster works.</small></div>
         <div class="platform-benefits">
-          <article><span>⬡</span><div><h3>Cloud-agnostic</h3><p>One application model compiles to Kubernetes, wherever it runs.</p></div></article>
+          <article><span>⬡</span><div><h3>Cloud-agnostic</h3><p>One application model runs on Kubernetes or provider-managed serverless.</p></div></article>
           <article><span>◇</span><div><h3>Direct or GitOps</h3><p>Apply to your cluster, or emit manifests for Argo CD to reconcile.</p></div></article>
           <article><span>♢</span><div><h3>Escape hatches</h3><p>Per-service overrides in <code>sol.toml</code>; generated Terraform and manifests are yours to take.</p></div></article>
-          <article><span>⌘</span><div><h3>No lock-in</h3><p>Open-source substrate — Kubernetes, Strimzi, Argo CD, Prometheus, Loki, Grafana, Terraform.</p></div></article>
+          <article><span>⌘</span><div><h3>No lock-in</h3><p>Open-source substrate — Kubernetes, Strimzi, Argo CD, Prometheus, Loki, Grafana, Terraform — or native Lambda and Cloud Run.</p></div></article>
         </div>
       </div>
       <div class="platform-stack" aria-label="Ownership layers">
         <div class="stack-spine"></div>
         <article class="stack-card stack-app"><span>⌁</span><b>Your App</b></article>
         <article class="stack-card stack-sol"><span>◉</span><b>Sol Factory</b></article>
-        <article class="stack-card stack-infra"><span>⬡</span><b>Kubernetes</b></article>
+        <article class="stack-card stack-infra"><span>⬡</span><b>Kubernetes · Serverless</b></article>
         <article class="stack-card stack-world"><span>⌁</span><b>Your Cloud Account</b></article>
         <p class="stack-note">From code<br/>to production.<span>↖</span></p>
       </div>
@@ -200,7 +200,7 @@ import Base from '../layouts/Base.astro';
         <div class="split-panel accent">
           <p class="split-title">Operated as one workflow</p>
           <ul>
-            <li><code>sol status</code> — rollout state and Kubernetes diagnosis</li>
+            <li><code>sol status</code> — rollout state and provider diagnosis</li>
             <li><code>sol releases</code> and <code>sol rollback</code> — inspect and reverse</li>
             <li><code>.sol/runs/</code> — deploy logs that outlive the terminal</li>
             <li>Canary and blue-green rollout from <code>sol.toml</code></li>
@@ -231,7 +231,7 @@ import Base from '../layouts/Base.astro';
         <article class="proof-card">
           <span class="proof-tag">Status</span>
           <h3>Honest about the edges</h3>
-          <p>Single-region Kubernetes today. Multi-region, hosted, and cloud provisioning are experimental or not yet built.</p>
+          <p>Single-region Kubernetes today; serverless execution is experimental. Multi-region, hosted, and broader cloud provisioning are not yet built.</p>
           <a href="https://github.com/loganbnielsen/sol/blob/main/docs/planning/ROADMAP.md">See the roadmap ↗</a>
         </article>
       </div>
@@ -241,7 +241,7 @@ import Base from '../layouts/Base.astro';
       <div class="closing-sun"></div>
       <p class="section-label">Start with one service</p>
       <h2>Make production<br/><em>boring again.</em></h2>
-      <p>Start on k3d locally. Ship to your own Kubernetes cluster when you're ready.</p>
+      <p>Start on k3d locally. Ship to your own Kubernetes or serverless target when you're ready.</p>
       <div class="actions"><a class="button primary" href="https://github.com/loganbnielsen/sol">Star on GitHub <span>→</span></a><a class="button ghost" href="https://github.com/loganbnielsen/sol/blob/main/docs/guides/TUTORIAL.md">Read the tutorial</a></div>
     </section>
 
