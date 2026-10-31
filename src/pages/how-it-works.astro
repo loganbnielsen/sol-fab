@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 ---
 
-<Base title="How Sol works — from repository to production" description="A technical walkthrough of how Sol discovers application units, derives a deployment plan, generates Kubernetes resources, and keeps the system operable in your cloud.">
+<Base title="How Sol works — from repository to production" description="A technical walkthrough of how Sol discovers application units, derives a deployment plan, generates Kubernetes or serverless resources, and keeps the system operable in your cloud.">
   <main class="walkthrough-page">
     <nav class="walkthrough-nav shell" aria-label="Technical walkthrough navigation">
       <a class="brand" href="/" aria-label="Sol home">
@@ -18,7 +18,7 @@ import Base from '../layouts/Base.astro';
     <header class="walkthrough-hero shell">
       <p class="section-label">Technical walkthrough</p>
       <h1>Your code becomes<br/><em>a production system.</em></h1>
-      <p>Follow one backend from repository conventions to generated Kubernetes resources, then from a fast local loop to an observable release in your cloud.</p>
+      <p>Follow one backend from repository conventions to generated Kubernetes or serverless resources, then from a fast local loop to an observable release in your cloud.</p>
       <div class="walkthrough-contract"><span>Same code.</span><span>Same contract.</span><span>Different environments.</span></div>
       <a class="walkthrough-start" href="#repository">Start with the repository <span aria-hidden="true">↓</span></a>
     </header>
@@ -71,13 +71,13 @@ import Base from '../layouts/Base.astro';
     </section>
 
     <section class="walkthrough-step reference-panel shell" id="resources">
-      <div class="step-copy"><span class="step-number">03</span><p class="section-label">Generated resources</p><h2>Each primitive becomes ordinary Kubernetes.</h2><p>Sol targets an open substrate in your account. The generated resources remain recognizable, inspectable, and operable with the tools you already use.</p></div>
+      <div class="step-copy"><span class="step-number">03</span><p class="section-label">Generated resources</p><h2>Each primitive becomes ordinary infrastructure.</h2><p>On Kubernetes, Sol emits ordinary namespaces, workloads, and services. On a serverless target, <code>-svc</code> and <code>-fn</code> become native Lambda functions or Cloud Run services and jobs. Either way, the resources remain recognizable and operable with the provider's own tools.</p></div>
       <div class="resource-map" aria-label="Application primitives and the resources they generate">
         <article class="resource-row"><div class="resource-unit svc"><code>checkout_svc</code><span>service</span></div><div class="resource-cards"><span>Deployment</span><span>Service</span><span>ConfigMap / Secret</span><span>Ingress <small>optional</small></span></div></article>
         <article class="resource-row"><div class="resource-unit worker"><code>payment_worker</code><span>worker</span></div><div class="resource-cards"><span>Deployment</span><span>ConfigMap / Secret</span><span>Consumer identity</span></div></article>
         <article class="resource-row"><div class="resource-unit fn"><code>reconcile_fn</code><span>function</span></div><div class="resource-cards"><span>Job / CronJob</span><span>ConfigMap / Secret</span><span>Run evidence</span></div></article>
       </div>
-      <p class="diagram-footnote">These are emitted together as one set per unit — not a pipeline. Namespaces and service accounts are generated alongside them.</p>
+      <p class="diagram-footnote">Kubernetes emits these together as one set per unit — not a pipeline. On serverless targets, worker resources stay Kubernetes-only; <code>-svc</code> and <code>-fn</code> map to Lambda or Cloud Run resources.</p>
     </section>
 
     <section class="walkthrough-step walkthrough-support shell" id="configure">
@@ -101,20 +101,20 @@ steps    = [10, 40, 100]   # % of traffic</pre>
     </section>
 
     <section class="walkthrough-step reference-panel shell" id="environments">
-      <div class="step-copy"><span class="step-number">05</span><p class="section-label">Local to production</p><h2>Increase realism without changing the contract.</h2><p>Move from native-process feedback to production-shaped containers, then to Kubernetes in your cloud. Each stage answers a different question without inventing a different application model.</p></div>
+      <div class="step-copy"><span class="step-number">05</span><p class="section-label">Local to production</p><h2>Increase realism without changing the contract.</h2><p>Move from native-process feedback to production-shaped containers, then to Kubernetes or serverless in your cloud. Each stage answers a different question without inventing a different application model.</p></div>
       <div class="environment-flow" aria-label="Local to production workflow">
         <article><span>Fast loop</span><code>sol local run</code><b>Native processes</b><small>One build · hot feedback</small></article><i aria-hidden="true">→</i>
         <article><span>Production-shaped</span><code>sol up</code><b>Local Kubernetes</b><small>Real containers · real charts</small></article><i aria-hidden="true">→</i>
-        <article><span>Your cloud</span><code>sol deploy prod/aws/us-east-1</code><b>Managed Kubernetes</b><small>AWS · GCP · conformant clusters</small></article>
+        <article><span>Your cloud</span><code>sol deploy prod/aws/us-east-1</code><b>Kubernetes or serverless</b><small>AWS · GCP · conformant clusters</small></article>
       </div>
       <div class="same-contract">Same application contract <span>PORT · /healthz · /metrics · SIGTERM</span></div>
     </section>
 
     <section class="walkthrough-step walkthrough-support shell" id="operate">
-      <div class="step-copy"><span class="step-number">06</span><p class="section-label">Inspect, operate, iterate</p><h2>The evidence survives the terminal.</h2><p>Status, releases, logs, metrics, traces, and rollback are part of the same workflow. When something fails, Sol connects the application model back to the Kubernetes evidence.</p></div>
+      <div class="step-copy"><span class="step-number">06</span><p class="section-label">Inspect, operate, iterate</p><h2>The evidence survives the terminal.</h2><p>Status, releases, logs, metrics, traces, and rollback are part of the same workflow. When something fails, Sol connects the application model back to the provider evidence.</p></div>
       <div class="ops-grid">
         <div class="code-surface ops-terminal"><span><b>$ sol status</b></span><span>UNIT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; KIND&nbsp;&nbsp;&nbsp; STATUS</span><span>checkout_svc&nbsp;&nbsp;&nbsp;&nbsp; service&nbsp; <em>Running</em></span><span>payment_worker&nbsp;&nbsp; worker&nbsp;&nbsp; <em>Running</em></span><span>reconcile_fn&nbsp;&nbsp;&nbsp;&nbsp; job&nbsp;&nbsp;&nbsp;&nbsp; <em>Succeeded</em></span><span class="terminal-gap"><b>$ sol logs checkout_svc</b></span><span>INFO&nbsp; server started on :8080</span><span>INFO&nbsp; GET /healthz 200 3ms</span></div>
-        <div class="ops-cards"><article><b>Observe</b><p>Prometheus metrics, Loki logs, Grafana dashboards, and trace context are wired to the unit identity.</p></article><article><b>Recover</b><p>Inspect release records, diagnose rollout state, and use <code>sol rollback</code> when a release should be reversed.</p></article><article class="control-card"><b>You keep control</b><p>The resources run in your cloud. Inspect or modify them with standard Kubernetes tools—and keep them if you stop using Sol.</p></article></div>
+        <div class="ops-cards"><article><b>Observe</b><p>Prometheus metrics, Loki logs, Grafana dashboards, and trace context are wired to the unit identity.</p></article><article><b>Recover</b><p>Inspect release records, diagnose rollout state, and use <code>sol rollback</code> when a release should be reversed.</p></article><article class="control-card"><b>You keep control</b><p>The resources run in your cloud. Inspect or modify them with the provider's tools—and keep them if you stop using Sol.</p></article></div>
       </div>
     </section>
 
